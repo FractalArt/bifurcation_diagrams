@@ -4,6 +4,9 @@ Generate the bifurcation diagram for various maps.
 
 ![logistic_map_bifurcation_diagram](data/bifurcation.jpg)
 
+Basis for solving exercises 10.2.3 - 10.2.8 in Strogatz'
+`Nonlinear Dynamics and Chaos`.
+
 ***
 
 ## Usage

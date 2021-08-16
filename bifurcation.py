@@ -2,16 +2,29 @@
 """
 Create bifurcation diagrams.
 
+Basis for solving exercises 10.2.3 - 10.2.8 in Strogatz'
+`Nonlinear Dynamics and Chaos`.
+
 There several implemented maps which can be selected by setting the
 command-line flag `--map` which accepts an integer:
 0: logisitc map
     f(x) = r*x*(1-x)
+1: standard period doubling route to chaos
+    f(x) = x * exp(-r * (1 - x))
+2: one period-doubling bifurcation and the show is over
+    f(x) = exp(-r * x)
+3: period-doubling and chaos galore
+    f(x) = r * cos(x)
+4: nasty mess
+    f(x) = r * tan(x)
+5: attractors sometimes come in symmetric pairs
+    f(x) = r * x - x^3
 """
 import argparse as ap
+import math
 import matplotlib.pyplot as plt
 import multiprocessing as mp
 import numpy as np
-import pathlib as pl
 
 from matplotlib.colors import LinearSegmentedColormap
 
@@ -26,8 +39,8 @@ def setup_cli():
     parser.add_argument('--r-max', type=float, default=4.0,
                         help="The maximal value of the bifurcation parameter.")
     parser.add_argument('--r-points', type=int, default=2000,
-            help="The number of bifurcation parameter points to sample between "
-                 "the minimal and maximal values.")
+                        help="The number of bifurcation parameter points to sample between "
+                        "the minimal and maximal values.")
     parser.add_argument('--skip', type=int, default=600,
                         help="The number of iterations to skip to let the map reach its final state.")
     parser.add_argument('-n', '--points-to-draw-after-skip', type=int, default=200,
@@ -38,12 +51,31 @@ def setup_cli():
     parser.add_argument('--marker', type=str, default='o', help="The marker type.")
     parser.add_argument('--map', type=int, default=0, help="An integer indicating which map to use [Default: logistic map].")
 
-
     return parser.parse_args()
 
 
 def logistic_map(x, r):
     return r * x * (1.0 - x)
+
+
+def std_period_doubling_route_to_chaos(x, r):
+    return x * math.exp(-r * (1-x))
+
+
+def one_period_doubling_bifurcation_and_show_is_over(x, r):
+    return math.exp(-r * x)
+
+
+def period_doubling_and_chaos_galore(x, r):
+    return r * math.cos(x)
+
+
+def nasty_mess(r, x):
+    return r * math.tan(x)
+
+
+def symmetric_pairs(r, x):
+    return r * x - x**3
 
 
 def get_points_to_draw(f, x0: float, skip: int, n: int, r: float) -> list:
@@ -111,7 +143,12 @@ if __name__ == "__main__":
 
     # define the mapping functions
     mappings = {
-        0: logistic_map
+        0: logistic_map,
+        1: std_period_doubling_route_to_chaos,
+        2: one_period_doubling_bifurcation_and_show_is_over,
+        3: period_doubling_and_chaos_galore,
+        4: nasty_mess,
+        5: symmetric_pairs
     }
 
     # parse the command-line arguments

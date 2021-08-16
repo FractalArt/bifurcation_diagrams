@@ -1,6 +1,6 @@
 # Bifurcation Diagram
 
-Generate the bifurcation diagram for various map.
+Generate the bifurcation diagram for various maps.
 
 ![logistic_map_bifurcation_diagram](data/bifurcation.jpg)
 
